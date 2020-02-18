@@ -1,0 +1,4 @@
+github.com/NebulousLabs/go-skynet v0.0.0-20200203182057-8c282e40d2c0 h1:IHpXB03XRf0//8loDRNNvhmLfBjptC16sbkkW8ITHVE=
+github.com/NebulousLabs/go-skynet v0.0.0-20200203182057-8c282e40d2c0/go.mod h1:3UKenfhHA+bEykwlp5Xuh0jDEiUlsfIvwRi/x81iKX4=
+github.com/NebulousLabs/go-skynet v0.0.0-20200218082823-fe3cec371fa1 h1:nKiVWutGXCsfmfO0hvx8PJf9CiWwqDwu4mUut4j5QoA=
+github.com/NebulousLabs/go-skynet v0.0.0-20200218082823-fe3cec371fa1/go.mod h1:3UKenfhHA+bEykwlp5Xuh0jDEiUlsfIvwRi/x81iKX4=
