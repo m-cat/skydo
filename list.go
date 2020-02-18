@@ -108,3 +108,10 @@ func openList(ll *listList, i int) *todoList {
 	printList(tl, 0, displayAmount)
 	return tl
 }
+
+func newList(tl todoList, ll *listList) *todoList {
+	ll.lists = append(ll.lists, tl)
+	i := len(ll.lists) - 1
+	ll.current = i
+	return &ll.lists[i]
+}

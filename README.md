@@ -14,6 +14,7 @@ You can also build with `make build` and place the `skydo` executable in your `$
 
 - Only tested on OSX.
 - The code was written quickly and is not commented very well.
+- Inefficient. Could add some local caching of lists (they are always downloaded on startup).
 
 ## License
 

@@ -1,9 +1,10 @@
 package main
 
 import (
-	"os"
 	"errors"
+	"fmt"
 	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 
@@ -18,6 +19,8 @@ func loadLists() (listList, error) {
 	if err != nil {
 		return el, nil
 	}
+
+	fmt.Println("\nLoading lists...")
 
 	lists := []todoList{}
 	lines := strings.Split(string(saved), "\n")
@@ -38,7 +41,18 @@ func loadLists() (listList, error) {
 		if len(tokens) != 2 {
 			return el, errors.New("malformed save file")
 		}
-		lists = append(lists, todoList{saved: true, name: tokens[0], skylink: tokens[1]})
+		name := tokens[0]
+		skylink := tokens[1]
+		var tl todoList
+		if skylink != "" {
+			tl, err = downloadList(name, skylink)
+			if err != nil {
+				return el, err
+			}
+		} else {
+			tl = todoList{saved: true, name: name, skylink: skylink}
+		}
+		lists = append(lists, tl)
 	}
 
 	if current >= len(lists) {
@@ -108,11 +122,6 @@ func parseList(rawList, skylink string) (todoList, error) {
 	entries := []todoEntry{}
 	lines := strings.Split(rawList, "\n")
 
-	// fmt.Printf("%v\n", lines)
-
-	// // Get rid of headers.
-	// lines = lines[4:len(lines)-2]
-
 	if len(lines) < 1 {
 		return todoList{}, errors.New("malformed list")
 	}
@@ -128,7 +137,17 @@ func parseList(rawList, skylink string) (todoList, error) {
 func writeList(tl *todoList) string {
 	output := tl.name
 	for _, entry := range tl.entries {
-		output += "\n"+entry.text
+		output += "\n" + entry.text
 	}
 	return output
+}
+
+func checkDuplicateName(name string, ll *listList) error {
+	for _, list := range ll.lists {
+		if list.name == name {
+			return errors.New("a list named '" + name + "' already exists")
+		}
+	}
+
+	return nil
 }

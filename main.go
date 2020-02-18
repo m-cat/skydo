@@ -106,7 +106,6 @@ func main() {
 		if err != nil {
 			fmt.Println("\nerror:", err, "\n")
 		}
-		// fmt.Printf("\ntl: %v\nll: %v\n\n", tl, ll)
 	}
 }
 
@@ -282,7 +281,11 @@ func commandLoad(tl *todoList, ll *listList, command string, args string) (*todo
 	if err != nil {
 		return tl, err
 	}
-	tl = &tl2
+	err = checkDuplicateName(tl2.name, ll)
+	if err != nil {
+		return tl, err
+	}
+	tl = newList(tl2, ll)
 
 	printList(tl, 0, displayAmount)
 	return tl, nil
@@ -423,17 +426,13 @@ func commandList(tl *todoList, ll *listList, command string, args string) error 
 func commandNew(tl *todoList, ll *listList, command string, args string) (*todoList, error) {
 	name := args
 
-	for _, list := range ll.lists {
-		if list.name == name {
-			return tl, errors.New("a list named '" + name + "' already exists")
-		}
+	err := checkDuplicateName(name, ll)
+	if err != nil {
+		return tl, err
 	}
 
 	list := todoList{name: name, entries: []todoEntry{}}
-	ll.lists = append(ll.lists, list)
-	i := len(ll.lists) - 1
-	ll.current = i
-	tl = &ll.lists[i]
+	tl = newList(list, ll)
 	tl.saved = false
 	ll.saved = false
 
